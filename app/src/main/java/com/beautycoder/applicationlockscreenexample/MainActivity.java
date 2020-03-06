@@ -14,12 +14,13 @@ import com.beautycoder.pflockscreen.security.PFSecurityManager;
 import com.beautycoder.pflockscreen.viewmodels.PFPinCodeViewModel;
 
 public class MainActivity extends AppCompatActivity {
+     PFLockScreenFragment pfLockScreenFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        showLockScreenFragment();
+//        showLockScreenFragment();
         //PFSecurityManager.getInstance().setPinCodeHelper(new TestPFPinCodeHelperImpl());
     }
 
@@ -63,6 +64,12 @@ public class MainActivity extends AppCompatActivity {
                 }
             };
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        showLockScreenFragment();
+    }
+
     private void showLockScreenFragment() {
         new PFPinCodeViewModel().isPinCodeEncryptionKeyExist().observe(
                 this,
@@ -83,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showLockScreenFragment(boolean isPinExist) {
+
         final PFFLockScreenConfiguration.Builder builder = new PFFLockScreenConfiguration.Builder(this)
                 .setTitle(isPinExist ? "Unlock with your pin code or fingerprint" : "Create Code")
                 .setCodeLength(6)
@@ -90,9 +98,9 @@ public class MainActivity extends AppCompatActivity {
                 .setNewCodeValidation(true)
                 .setNewCodeValidationTitle("Please input code again")
                 .setUseFingerprint(true);
-        final PFLockScreenFragment fragment = new PFLockScreenFragment();
+        pfLockScreenFragment = new PFLockScreenFragment();
 
-        fragment.setOnLeftButtonClickListener(new View.OnClickListener() {
+        pfLockScreenFragment.setOnLeftButtonClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(MainActivity.this, "Left button pressed", Toast.LENGTH_LONG).show();
@@ -102,19 +110,30 @@ public class MainActivity extends AppCompatActivity {
         builder.setMode(isPinExist
                 ? PFFLockScreenConfiguration.MODE_AUTH
                 : PFFLockScreenConfiguration.MODE_CREATE);
+
+        builder.setAutoShowFingerprint(true);
         if (isPinExist) {
-            fragment.setEncodedPinCode(PreferencesSettings.getCode(this));
-            fragment.setLoginListener(mLoginListener);
+            pfLockScreenFragment.setEncodedPinCode(PreferencesSettings.getCode(this));
+            pfLockScreenFragment.setLoginListener(mLoginListener);
         }
 
-        fragment.setConfiguration(builder.build());
-        fragment.setCodeCreateListener(mCodeCreateListener);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container_view, fragment).commit();
-
+        pfLockScreenFragment.setConfiguration(builder.build());
+        pfLockScreenFragment.setCodeCreateListener(mCodeCreateListener);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(android.R.id.content, pfLockScreenFragment)
+                .commit();
     }
 
     private void showMainFragment() {
+        if (pfLockScreenFragment != null){
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .remove(pfLockScreenFragment)
+                    .commit();
+            pfLockScreenFragment = null;
+        }
+
         final MainFragment fragment = new MainFragment();
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container_view, fragment).commit();
