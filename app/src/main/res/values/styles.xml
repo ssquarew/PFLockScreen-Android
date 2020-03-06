@@ -27,7 +27,7 @@
         <!-- Customize your theme here. -->
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">18dp</item>
-        <item name="android:foreground">@drawable/key_foreground</item>
+        <item name="android:foreground">@drawable/pin_lock_key_foreground</item>
     </style>
 
     <style name="MyLockScreenFingerprintButtonStyle">
@@ -39,7 +39,7 @@
     </style>
 
     <style name="MyLockScreenCodeStyle">
-        <item name="android:button">@drawable/code_selector</item>
+        <item name="android:button">@drawable/pin_lock_code_selector</item>
     </style>
 
     <style name="MyLockNextButtonStyle">

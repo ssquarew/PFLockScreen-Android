@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
 
         final PFFLockScreenConfiguration.Builder builder = new PFFLockScreenConfiguration.Builder(this)
                 .setTitle(isPinExist ? "Unlock with your pin code or fingerprint" : "Create Code")
-                .setCodeLength(6)
+                .setCodeLength(4)
                 .setLeftButton("Can't remeber")
                 .setNewCodeValidation(true)
                 .setNewCodeValidationTitle("Please input code again")

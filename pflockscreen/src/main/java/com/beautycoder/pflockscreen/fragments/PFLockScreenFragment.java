@@ -307,8 +307,44 @@ public class PFLockScreenFragment extends Fragment {
         @Override
         public void onCodeCompleted(String code) {
             if (mIsCreateMode) {
-                mNextButton.setVisibility(View.VISIBLE);
                 mCode = code;
+
+                if (mConfiguration.isNewCodeValidation() && TextUtils.isEmpty(mCodeValidation)) {
+                    mCodeValidation = mCode;
+                    cleanCode();
+                    titleView.setText(mConfiguration.getNewCodeValidationTitle());
+                    return;
+                }
+                if (mConfiguration.isNewCodeValidation() && !TextUtils.isEmpty(mCodeValidation) && !mCode.equals(mCodeValidation)) {
+                    errorAction();
+                    mCodeCreateListener.onNewCodeValidationFailed();
+                    titleView.setText(mConfiguration.getTitle());
+                    mCodeValidation = "";
+                    cleanCode();
+                    return;
+                }
+                mCodeValidation = "";
+                mPFPinCodeViewModel.encodePin(getContext(), mCode).observe(
+                        PFLockScreenFragment.this,
+                        new Observer<PFResult<String>>() {
+                            @Override
+                            public void onChanged(@Nullable PFResult<String> result) {
+                                if (result == null) {
+                                    return;
+                                }
+                                if (result.getError() != null) {
+                                    Log.d(TAG, "Can not encode pin code");
+                                    deleteEncodeKey();
+                                    return;
+                                }
+                                final String encodedCode = result.getResult();
+                                if (mCodeCreateListener != null) {
+                                    mCodeCreateListener.onCodeCreated(encodedCode);
+                                }
+                            }
+                        }
+                );
+
                 return;
             }
             mCode = code;

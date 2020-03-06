@@ -3,7 +3,7 @@
     <!-- NOTE: order is important (the first matching state(s) is what is rendered) -->
     <item
         android:state_checked="true"
-        android:drawable="@drawable/filled_code"/>
+        android:drawable="@drawable/pin_lock_filled_code"/>
     <item
-        android:drawable="@drawable/empty_code"/>
+        android:drawable="@drawable/pin_lock_empty_code"/>
 </selector>
