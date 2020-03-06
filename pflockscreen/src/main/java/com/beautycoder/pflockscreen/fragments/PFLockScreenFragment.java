@@ -324,7 +324,6 @@ public class PFLockScreenFragment extends Fragment {
                     return;
                 }
                 mCode = code;
-                mCodeValidation = "";
                 mPFPinCodeViewModel.encodePin(getContext(), mCode).observe(
                         PFLockScreenFragment.this,
                         new Observer<PFResult<String>>() {
