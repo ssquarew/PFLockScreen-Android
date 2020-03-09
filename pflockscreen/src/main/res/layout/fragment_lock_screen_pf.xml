@@ -6,7 +6,7 @@
 
 
     <ImageView
-        style="?pf_lock_screen"
+        style="?pf_lock_screen" android:clickable="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:theme="@style/PFLockScreenStyle" />
