@@ -114,6 +114,10 @@ public class PFLockScreenFragment extends Fragment {
         return view;
     }
 
+    public boolean isFingerPrintAvailable(){
+        return mFingerprintHardwareDetected;
+    }
+
     @Override
     public void onStart() {
         if (!mIsCreateMode && mUseFingerPrint && mConfiguration.isAutoShowFingerprint() &&
