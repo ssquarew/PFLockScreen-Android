@@ -314,9 +314,19 @@ public class PFLockScreenFragment extends Fragment {
                 mCode = code;
 
                 if (mConfiguration.isNewCodeValidation() && TextUtils.isEmpty(mCodeValidation)) {
+
                     mCodeValidation = mCode;
-                    cleanCode();
-                    titleView.setText(mConfiguration.getNewCodeValidationTitle());
+                    titleView.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (titleView == null)
+                                return;
+
+                            cleanCode();
+                            titleView.setText(mConfiguration.getNewCodeValidationTitle());
+                        }
+                    }, 120);
+
                     return;
                 }
                 if (mConfiguration.isNewCodeValidation() && !TextUtils.isEmpty(mCodeValidation) && !mCode.equals(mCodeValidation)) {
